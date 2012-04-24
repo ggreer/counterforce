@@ -5,7 +5,7 @@ var util = require('util');
 
 var app = express.createServer(express.logger());
 
-var smtpTransport = nodemailer.createTransport("SMTP",{
+var smtp_transport = nodemailer.createTransport("SMTP",{
   service: "Gmail",
   auth: {
     user: settings.smtp_user,
@@ -16,7 +16,7 @@ var smtpTransport = nodemailer.createTransport("SMTP",{
 function check_commit(req, res) {
   var forced;
   var payload;
-  var mailOptions = {
+  var mail_opts = {
     from: settings.smtp_user,
     to: settings.recipients
   };
@@ -27,14 +27,13 @@ function check_commit(req, res) {
   if (req.body && req.body.payload) {
     payload = JSON.parse(req.body.payload);
     console.log(payload);
-    if (payload.forced && payload.ref === "refs/heads/master") {
-      console.log("OH SHIIIIIIIIIT user", payload.pusher.name, "has forced a push to master");
-      console.log("compare at ", payload.compare);
-      mailOptions.subject = util.format("%s: Push forced to master", payload.repository.name);
-      mailOptions.text = util.format("User %s forced a push to master in %s. Head is now at %s from %s", payload.pusher.name, payload.repository.name, payload.head_commit.id, payload.head_commit.timestamp);
+    if (payload.forced && settings.bad_refs.indexOf(payload.ref) !== -1) {
+      console.log("user", payload.pusher.name, "has forced a push to", payload.ref);
 
-      // send mail with defined transport object
-      smtpTransport.sendMail(mailOptions, function(error, response) {
+      mail_opts.subject = util.format("%s: Push forced to master", payload.repository.name);
+      mail_opts.text = util.format("User %s forced a push to master in %s. Head is now at %s from %s", payload.pusher.name, payload.repository.name, payload.head_commit.id, payload.head_commit.timestamp);
+
+      smtp_transport.sendMail(mail_opts, function(error, response) {
         if(error){
           console.log(error);
         }else{
