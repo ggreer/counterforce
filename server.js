@@ -5,8 +5,10 @@ var app = express.createServer(express.logger());
 
 function check_commit(req, res) {
   res.send('cool story, bro');
+  console.log(req.body);
 }
 
+app.use(express.bodyParser());
 app.get('/', check_commit);
 app.post('/', check_commit);
 
