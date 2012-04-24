@@ -1,1 +1,5 @@
 exports.port = 9000;
+
+exports.recipients = "";
+exports.smtp_user = "";
+exports.smtp_pass = "";
