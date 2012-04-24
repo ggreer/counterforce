@@ -4,18 +4,21 @@ var settings = require('./settings');
 
 var app = express.createServer(express.logger());
 
-// create reusable transport method (opens pool of SMTP connections)
 var smtpTransport = nodemailer.createTransport("SMTP",{
-    service: "Gmail",
-    auth: {
-        user: settings.smtp_user,
-        pass: settings.smtp_pass
-    }
+  service: "Gmail",
+  auth: {
+    user: settings.smtp_user,
+    pass: settings.smtp_pass
+  }
 });
 
 function check_commit(req, res) {
   var forced;
   var payload;
+  var mailOptions = {
+    from: settings.smtp_user,
+    to: settings.recipients
+  };
 
   res.send('cool story, bro');
   console.log(req.body);
@@ -23,26 +26,19 @@ function check_commit(req, res) {
   if (req.body && req.body.payload) {
     payload = JSON.parse(req.body.payload);
     console.log(payload);
-    if (payload.forced) {
-      console.log("OH SHIIIIIIIIIT user", payload.pusher.name, "has forced a push");
+    if (payload.forced && payload.ref === "refs/heads/master") {
+      console.log("OH SHIIIIIIIIIT user", payload.pusher.name, "has forced a push to master");
       console.log("compare at ", payload.compare);
-      var mailOptions = {
-          from: settings.smtp_user,
-          to: settings.recipients,
-          subject: "",
-          text: "User "
-      };
+      mailOptions.subject = util.format("%s: Push forced to master", payload.repository.name);
+      mailOptions.text = util.format("User %s forced a push to master in %s. Head is now at %s from %s", payload.pusher.name, payload.repository.name, payload.head_commit.id, payload.head_commit.timestamp);
 
       // send mail with defined transport object
-      smtpTransport.sendMail(mailOptions, function(error, response){
-          if(error){
-              console.log(error);
-          }else{
-              console.log("Message sent: " + response.message);
-          }
-
-          // if you don't want to use this transport object anymore, uncomment following line
-          //smtpTransport.close(); // shut down the connection pool, no more messages
+      smtpTransport.sendMail(mailOptions, function(error, response) {
+        if(error){
+          console.log(error);
+        }else{
+          console.log("Message sent:", response.message);
+        }
       });
     }
     else {
