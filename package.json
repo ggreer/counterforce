@@ -7,7 +7,7 @@
     "url": "git://github.com/ggreer/counterforce.git"
   },
   "dependencies": {
-    "express": "2.x",
+    "express": "2.x"
   },
   "devDependencies": {},
   "optionalDependencies": {},
