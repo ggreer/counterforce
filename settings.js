@@ -1,3 +1,1 @@
-{
-  "port": 9000
-}
+exports.port = 9000;

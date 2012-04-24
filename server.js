@@ -1,5 +1,5 @@
 var express = require('express');
-var settings = require('settings');
+var settings = require('./settings');
 
 var app = express.createServer();
 
