@@ -7,7 +7,8 @@
     "url": "git://github.com/ggreer/counterforce.git"
   },
   "dependencies": {
-    "express": "2.x"
+    "express": "2.x",
+    "nodemailer": "0.3.x"
   },
   "devDependencies": {},
   "optionalDependencies": {},
