@@ -23,7 +23,6 @@ function check_commit(req, res) {
   };
 
   res.send("Cool story, bro.");
-  console.log(req.body);
 
   if (!req.body || !req.body.payload) {
     console.log("No request payload.");
