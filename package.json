@@ -1,0 +1,15 @@
+{
+  "author": "Geoff Greer <geoff@greer.fm> (http://geoff.greer.fm/)",
+  "name": "counterforce",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ggreer/counterforce.git"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
