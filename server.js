@@ -46,11 +46,13 @@ function check_commit(req, res) {
     return;
   }
 
-  console.log(payload.pusher.name, "has forced a push to", payload.ref);
+  console.log(payload.pusher.name, "forced a push to", payload.ref);
 
-  mail_opts.subject = util.format("%s: push forced to master", payload.repository.name);
+  mail_opts.subject = util.format("%s: %s forced a push to %s",
+    payload.repository.name, payload.pusher.name, payload.ref
+  );
   mail_opts.text = util.format(
-    "User %s forced a push to ref %s in repo %s. Head is now at %s from %s. Compare %s",
+    "User %s forced a push to ref %s in repo %s.\nHead is now at %s from %s.\nCompare %s",
     payload.pusher.name, payload.ref, payload.repository.name, payload.head_commit.url,
     payload.head_commit.timestamp, payload.compare
   );
