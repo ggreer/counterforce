@@ -1,0 +1,10 @@
+// refs that we want to alert on
+exports.watch_refs = [
+  "refs/heads/master"
+];
+
+exports.port = 9000;
+
+exports.recipients = "example@lists.example.com";
+exports.smtp_user = "example-user@gmail.com";
+exports.smtp_pass = "1234";

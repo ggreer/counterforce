@@ -15,5 +15,8 @@
   "engines": {
     "node": "*"
   },
-  "main": "server.js"
+  "main": "lib/server.js",
+  "scripts": {
+    "start": "node lib/server.js"
+  }
 }
